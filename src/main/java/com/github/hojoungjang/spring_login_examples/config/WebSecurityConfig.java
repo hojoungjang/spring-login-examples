@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.github.hojoungjang.spring_login_examples.service.UserService;
+import com.github.hojoungjang.spring_login_examples.service.AuthUserDetailsService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig {
-    private final UserService userService;
+    private final AuthUserDetailsService authUserDetailsService;
 
     @Bean
     WebSecurityCustomizer configure() {
@@ -49,7 +49,7 @@ public class WebSecurityConfig {
         BCryptPasswordEncoder bCryptPasswordEncoder
     ) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-            .userDetailsService(userService)
+            .userDetailsService(authUserDetailsService)
             .passwordEncoder(bCryptPasswordEncoder)
             .and()
             .build();
