@@ -35,7 +35,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .defaultSuccessUrl("/articles"))
+                        .defaultSuccessUrl("/welcome"))
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true))
