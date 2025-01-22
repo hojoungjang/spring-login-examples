@@ -20,6 +20,10 @@ public class UserService {
             .email(request.getEmail())
             .password(passwordEncoder.encode(request.getPassword()))
             .build()).getId();
-            
+    }
+
+    public User findById(Long userId) {
+        return userRepo.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 }
