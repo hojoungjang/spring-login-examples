@@ -23,12 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class TokenProvider {
     private final JwtProperties jwtProperties;
 
-    public String generateToken(User user, Duration expiredAt) {
-        Date expiry = new Date((new Date()).getTime() + expiredAt.toMillis());
-        return makeToken(expiry, user);
-    }
-
-    private String makeToken(Date expiry, User user) {
+    public String generateToken(User user, Duration expiryOffset) {
+        Date expiry = new Date((new Date()).getTime() + expiryOffset.toMillis());
         Date now = new Date();
         return Jwts.builder()
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -41,7 +37,7 @@ public class TokenProvider {
             .compact();
     }
 
-    public boolean validToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parser()
                 .setSigningKey(jwtProperties.getSecretKey())

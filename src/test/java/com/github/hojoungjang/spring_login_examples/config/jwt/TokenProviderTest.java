@@ -49,26 +49,26 @@ public class TokenProviderTest {
         assertThat(userId).isEqualTo(testUser.getId());
     }
 
-    @DisplayName("validToken(): 만료된 토큰인 경우에 유효성 검증에 실패한다.")
+    @DisplayName("validateToken(): 만료된 토큰인 경우에 유효성 검증에 실패한다.")
     @Test
-    void validToken_invalidToken() {
+    void validateToken_invalidateToken() {
         // given
         String token = JwtFactory.builder()
             .expiration(new Date(new Date().getTime() - Duration.ofDays(7).toMillis()))
             .build()
             .createToken(jwtProperties);
 
-        boolean result = tokenProvider.validToken(token);
+        boolean result = tokenProvider.validateToken(token);
         assertThat(result).isFalse();
     }
 
-    @DisplayName("validToken(): 유효한 토큰인 경우에 유효성 검증에 성공한다.")
+    @DisplayName("validateToken(): 유효한 토큰인 경우에 유효성 검증에 성공한다.")
     @Test
-    void validToken_validToken() {
+    void validateToken_validateToken() {
         //given
         String token = JwtFactory.withDefaultValues().createToken(jwtProperties);
 
-        boolean result = tokenProvider.validToken(token);
+        boolean result = tokenProvider.validateToken(token);
 
         assertThat(result).isTrue();
     }
