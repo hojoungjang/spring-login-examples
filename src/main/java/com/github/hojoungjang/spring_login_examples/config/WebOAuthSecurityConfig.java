@@ -8,18 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.github.hojoungjang.spring_login_examples.config.jwt.TokenProvider;
 import com.github.hojoungjang.spring_login_examples.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.github.hojoungjang.spring_login_examples.config.oauth.OAuth2SuccessHandler;
 import com.github.hojoungjang.spring_login_examples.config.oauth.OAuth2UserCustomService;
-import com.github.hojoungjang.spring_login_examples.repository.RefreshTokenRepository;
-import com.github.hojoungjang.spring_login_examples.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,7 +61,7 @@ public class WebOAuthSecurityConfig {
                 .authorizationEndpoint()
                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
                 .and()
-                .successHandler(oAuth2SuccessHandler)
+                .successHandler(oAuth2SuccessHandler)   // 인중 성공시 리프레시/엑세스 토큰 발급하는 핸들러
                 .userInfoEndpoint()
                 .userService(oAuth2UserCustomService)); // DefaultOAuth2UserService 상속하는 서비스 클래스
 
