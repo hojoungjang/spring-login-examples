@@ -17,11 +17,13 @@
     <div class="card bg-dark" style="border-radius: 1rem;">
       <div class="card-body p-5 text-center">
         <h2 class="text-white">WELCOME</h2>
-        <p class="text-white-50 mt-2 mb-5">로그인에 성공하였습니다!</p>
+        <p class="text-white-50 mt-2 mb-5" th:text="안녕하세요 ${name} 님!"></p>
         <button class="btn btn-secondary" onclick="location.href='/logout'">로그아웃</button>
       </div>
     </div>
   </div>
 </section>
+<script src="/js/token.js"/>
+</script>
 </body>
 </html>
