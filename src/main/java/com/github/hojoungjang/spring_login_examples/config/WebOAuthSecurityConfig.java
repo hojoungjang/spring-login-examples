@@ -27,9 +27,9 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class WebOAuthSecurityConfig {
     private final OAuth2UserCustomService oAuth2UserCustomService;
-    private final TokenProvider tokenProvider;
-    private final RefreshTokenRepository refreshTokenRepo;
-    private final UserService userService;
+    private final TokenAuthenticationFilter tokenAuthenticationFilter;
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     // 스프링 시큐리티 비활성화
     @Bean
@@ -53,7 +53,7 @@ public class WebOAuthSecurityConfig {
             )
         );
 
-        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests(requests -> requests
                 .requestMatchers("/api/token").permitAll()
@@ -63,11 +63,11 @@ public class WebOAuthSecurityConfig {
         http.oauth2Login(login -> login
                 .loginPage("/login")
                 .authorizationEndpoint()
-                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
+                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
                 .and()
-                .successHandler(oAuth2SuccessHandler())
+                .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint()
-                .userService(oAuth2UserCustomService));
+                .userService(oAuth2UserCustomService)); // DefaultOAuth2UserService 상속하는 서비스 클래스
 
         http.logout(logout -> logout
                 .logoutSuccessUrl("/login"));
@@ -78,29 +78,5 @@ public class WebOAuthSecurityConfig {
                         new AntPathRequestMatcher("/api/**")));
 
         return http.build();
-    }
-
-    @Bean
-    OAuth2SuccessHandler oAuth2SuccessHandler() {
-        return new OAuth2SuccessHandler(tokenProvider,
-            refreshTokenRepo,
-            oAuth2AuthorizationRequestBasedOnCookieRepository(),
-            userService
-        );
-    }
-
-    @Bean
-    TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider);
-    }
-
-    @Bean
-    OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
-        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
-    }
-
-    @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
