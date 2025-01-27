@@ -16,10 +16,19 @@ public class CookieUtil {
         int maxAge
     ) {
         Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
+        cookie.setPath("/");            // cookie 가 포함될 경로 설정
         cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(true);  // client-side access 금지
         response.addCookie(cookie);
+
+        // ResponseCookie cookie2 = ResponseCookie.from(name, value)
+        //     .path("/")
+        //     .maxAge(maxAge)
+        //     .httpOnly(true)
+        //     .sameSite("Strict")
+        //     .build();
+
+        // response.addHeader("Set-Cookie", cookie2.toString());
     }
 
     public static void deleteCookie(
