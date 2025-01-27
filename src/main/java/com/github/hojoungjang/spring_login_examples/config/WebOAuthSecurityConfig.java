@@ -63,10 +63,14 @@ public class WebOAuthSecurityConfig {
                 .and()
                 .successHandler(oAuth2SuccessHandler)   // 인중 성공시 리프레시/엑세스 토큰 발급하는 핸들러
                 .userInfoEndpoint()
-                .userService(oAuth2UserCustomService)); // DefaultOAuth2UserService 상속하는 서비스 클래스
+                .userService(oAuth2UserCustomService)) // DefaultOAuth2UserService 상속하는 서비스 클래스
+                .logout(logout -> logout
+                    .clearAuthentication(true)
+                    .deleteCookies(OAuth2SuccessHandler.ACCESS_TOKEN_COOKIE_NAME)
+                    .deleteCookies(OAuth2SuccessHandler.REFRESH_TOKEN_COOKIE_NAME));
 
-        http.logout(logout -> logout
-                .logoutSuccessUrl("/login"));
+        // http.logout(logout -> logout
+        //         .logoutSuccessUrl("/login"));
 
 
         http.exceptionHandling(handling -> handling
